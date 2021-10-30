@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');//importando mongoose y guardando en una constante llamada mongoose
 //construcción del esquema
 let TareaSchema = new mongoose.Schema({
-    //propiedades del esqumema:
+    //propiedades del esquema:
     idTarea: Number,
     nombreTarea: String,
     detalleTarea: String
