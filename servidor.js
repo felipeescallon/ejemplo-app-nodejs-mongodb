@@ -5,7 +5,7 @@ console.log("Hola mundo desde NodeJS");
 //IMPORTANDO PAQUETES Y OTROS ARCHIVOS + GUARDANDO EN CONSTANTES:
 const express = require('express');//importando express y guardando en una constante llamada express
 const mongoose = require('mongoose');//importando mongoose y guardando en una constante llamada mongoose
-const TareaSquema = require("modelo./s/Tarea.js");//importando el esquema de Tarea.js y guardando en una constante llamada TareaSquema
+const TareaSquema = require("./modelos/Tarea.js");//importando el esquema de Tarea.js y guardando en una constante llamada TareaSquema
 
 const app = express();//instanciando express y guardando en una constante llamada app
 
