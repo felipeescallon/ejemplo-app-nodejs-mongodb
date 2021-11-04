@@ -1,0 +1,2 @@
+# Ignora la siguiente carpeta que es innecesario subirla a un repo:
+node_modules
