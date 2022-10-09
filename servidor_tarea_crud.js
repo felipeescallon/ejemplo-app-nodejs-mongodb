@@ -31,15 +31,15 @@ router.get('/tarea', (req, res) => {//es para pedir(READ) info desde el lado del
             res.send(datos);
         }        
     })//no va ; porque es una función    
-});
+})
 
 router.post('/tarea', (req, res) => {//es para poner(CREATE) info desde el lado del cliente hacia el servidor
     let nuevaTarea = new TareaSquema({//se define un objeto dentro del constructor de TareaSquema
         //estos son los parámetros
         //obtengo el body (para eso era el url encoded y el json usando express)
-        idTarea: req.body.id,
-        nombreTarea: req.body.nombre,
-        detalleTarea: req.body.detalle//no es necesario la , aquí porque esta finalizando el bloque de código         
+        idTarea: req.body.idTarea,
+        nombreTarea: req.body.nombreTarea,
+        detalleTarea: req.body.detalleTarea//no es necesario la , aquí porque esta finalizando el bloque de código         
     });//la anterior sería la información que llega para construir una nueva tarea
 
     //a través de mongoose: permitir que el esquema nuevaTarea guarde la información...
@@ -51,7 +51,36 @@ router.post('/tarea', (req, res) => {//es para poner(CREATE) info desde el lado 
         //si no entra a error es porque se guardó la info, y para eso desde el servidor se le informa al cliente que la operación fue exitosa
         res.send("Tarea almacenada correctamente.")//no es necesario el ; aquí porque esta finalizando el bloque de código        
     })//no va ; porque es una función
-});
+})
+
+
+router.delete('/tarea/:id?', (req, res) => {
+    const id = req.params.id;
+    TareaSquema.findByIdAndDelete(id)
+    .then(data => {
+        if(!data){
+            res.status(404).send("No se encontro una tarea con ese ID");
+        }else{
+            res.send("Tarea se elimino");
+        }
+    })
+    .catch(err => {
+        res.status(500).send("La tarea con el id="+id+"no se ha podido eliminar")
+    })
+})
+
+router.put('/tarea/:id', (req,res) => {
+    const id = req.params.id;
+    TareaSquema.findByIdAndUpdate(id, req.body, {useFindAndModify: false})
+    .then(data => {
+        if(!data){
+            res.status(404).send("La tarea que intento actualizar no se encontro")
+        }else res.send("La tarea ha sido actualizada")
+    })
+    .catch(err => {
+        res.status(500).send("Error al actualizar la tarea con el id="+id);
+    })
+})
 
 
 app.use(router);//para agregarle las rutas creadas a nuestra app
