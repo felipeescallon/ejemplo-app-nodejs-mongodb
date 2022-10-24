@@ -1,4 +1,4 @@
 MongoDB-Atlas-Compass, Agile-GitHub, NodeJS-Express-Postman
-código semana 1
+código semana 1 y reto semana 3
 public-repo:
 https://github.com/felipeescallon/ejemplo-app-nodejs-mongodb
