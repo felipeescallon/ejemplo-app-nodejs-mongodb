@@ -2,9 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const fetch = require("node-fetch");//importamos para acceder a urls externas
-//PARA QUE FUNCIONE DEBE TRABAJARSE CON LA VERSIÓN DE node-fetch 2.6.5 y los type de node-fetch, ejecutando en la terminal los comandos:
+//PARA QUE FUNCIONE DEBE TRABAJARSE CON LA VERSIÓN DE node-fetch 2.6.5, ejecutando en la terminal los comandos:
 //npm i node-fetch@2.6.5
-//npm i @types/node-fetch
 //Pagina de la versión específica: https://www.npmjs.com/package/node-fetch/v/2.6.5
 
 
@@ -39,6 +38,8 @@ router.get('/persona', (req,res) => {
     )
 })
 
+
+//AHORA CON NOTIFICACIONES A TRAVÉS DEL microservicio realizado en Python:
 router.post('/persona', (req,res) => {
     const nuevaPersona = new PersonShema({
         tipoDocument: req.body.tipoDocument,
@@ -111,57 +112,6 @@ router.put('/persona/:id', (req,res) => {
     .catch(err => {
         res.status(500).send("Error al acutualizar la persona con el id="+id);
     })
-})
-
-//NOTIFICAR AL USUARIO
-//AHORA NOTIFICACIONES A TRAVÉS DEL microservicio realizado en Python (MÉTODO GET):
-// Se usa el paquete para javascript llamado fecth (para consumir el microservicio a través del llamaddo asíncrono a la URL externa donde correo el servidor de Python)
-
-router.post('/envio-correo', (req, res) => {
-    const sgMail = require('@sendgrid/mail')
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-    const msg = {
-      to: req.body.correo_destino, // Change to your recipient (test@example.com)
-      from: 'andresfecambridgelc@gmail.com', // Change to your verified sender (test@example.com)
-      subject: req.body.asunto,
-      text: req.body.contenido,
-      //html: `<strong>${text}</strong>`, //using template literals
-    }
-    sgMail
-      .send(msg)
-      .then(() => {
-        //console.log('Email sent')
-        res.send('Email sent')
-      })
-      .catch((error) => {
-        //console.error(error)
-        res.send(error)
-      })
-})
- 
-router.post('/sms', (req, res) => {
-    const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    const authToken = process.env.TWILIO_AUTH_TOKEN;
-    const client = require('twilio')(accountSid, authToken);
-    
-    client.messages
-      .create({
-        body: req.body.mensaje,        
-        to: '+57'+req.body.telefono, // Text this number (+12345678901)- it must be a verified number in your Twilio account!!!
-        from: '+14255377299', // From a valid Twilio number (+12345678901)
-      })
-      //.then((message) => console.log(message.sid));
-      .then(message => {
-        if(!message){
-            //res.status(404).send("¡No se encontró ningún mensaje!"); 
-            //res.sendStatus(404).send("¡No se encontró ningún mensaje!"); 
-            res.send('SMS  not found');
-        }else{
-            //res.send(404).send("¡El mensaje se envió con éxito!"); 
-            //res.sendStatus(404).send("¡El mensaje se envió con éxito!"); 
-            res.send('SMS sent');
-        }
-      })
 })
 
 
